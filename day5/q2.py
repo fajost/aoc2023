@@ -15,7 +15,9 @@ class Range:
     def end(self) -> int:
         return self.start + self.length - 1
 
-    def intersect_and_exclude(self, other: Range) -> Tuple[Optional[Range], List[Range]]:
+    def intersect_and_exclude(
+        self, other: Range
+    ) -> Tuple[Optional[Range], List[Range]]:
         intersect = None
         exclude = []
 
