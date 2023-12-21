@@ -57,5 +57,7 @@ if __name__ == "__main__":
         lines = file.readlines()
         array = create_array(lines)
         gears = find_gears(array)
-        valid_gear_ratios = [number[0] * number[1] for _, number in gears.items() if len(number) == 2]
+        valid_gear_ratios = [
+            number[0] * number[1] for _, number in gears.items() if len(number) == 2
+        ]
         print(sum(valid_gear_ratios))
