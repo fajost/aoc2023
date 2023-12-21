@@ -31,8 +31,7 @@ def check_possible_games(lines, max_values):
 if __name__ == "__main__":
     with SOURCE.open("r") as file:
         possible = check_possible_games(
-            file.readlines(),
-            {"red": 12, "green": 13, "blue": 14}
+            file.readlines(), {"red": 12, "green": 13, "blue": 14}
         )
         print(possible)
         print(sum(possible))
