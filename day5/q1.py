@@ -1,6 +1,6 @@
 from pathlib import Path
 
-SOURCE = Path("input.txt")
+SOURCE = Path("test.txt")
 
 
 class AlmanachMap:
