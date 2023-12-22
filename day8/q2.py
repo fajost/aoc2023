@@ -1,4 +1,5 @@
 from pathlib import Path
+import math
 
 SOURCE = Path("input.txt")
 
@@ -32,31 +33,36 @@ def read_file(lines):
 def main():
     with SOURCE.open("r") as file:
         instructions, starts, ends, map_left, map_right = read_file(file.read().splitlines())
-        idx = 0
-        steps = 0
-        current = [loc_to_id(loc) for loc in starts]
         end_locs = [False] * (loc_to_id("ZZZ") + 1)
         for end in ends:
             end_locs[loc_to_id(end)] = True
-        while True:
-            if instructions[idx] == "L":
-                mapping = map_left
-            elif instructions[idx] == "R":
-                mapping = map_right
-            for loc_idx in range(len(current)):
-                current[loc_idx] = mapping[current[loc_idx]]
-            idx += 1
-            if idx == len(instructions):
-                idx = 0
-            steps += 1
-            for loc in current:
-                if not end_locs[loc]:
+        # This code proves that we visit valid ends in a cyclical fashion, hence we can calculate the
+        # least common multiple to identify the total number of steps
+        factors = []
+        for start in starts:
+            current = loc_to_id(start)
+            idx = 0
+            steps = 0
+            found = []
+            while True:
+                if instructions[idx] == "L":
+                    mapping = map_left
+                elif instructions[idx] == "R":
+                    mapping = map_right
+                current = mapping[current]
+                idx += 1
+                if idx == len(instructions):
+                    idx = 0
+                steps += 1
+                if end_locs[current]:
+                    found.append(steps)
+                if steps == 100000:
                     break
-            else:
-                break
-            if steps % 1000000 == 0:
-                print(steps)
-        print(steps)
+            deltas = [found[0], *[found[i+1] - found[i] for i in range(len(found) - 1)]]
+            factors.append(deltas[0])
+            print(f"For start {start} found at {deltas}")
+
+        print(math.lcm(*factors))
 
 
 if __name__ == "__main__":
