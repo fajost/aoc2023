@@ -32,7 +32,9 @@ def read_file(lines):
 
 def main():
     with SOURCE.open("r") as file:
-        instructions, starts, ends, map_left, map_right = read_file(file.read().splitlines())
+        instructions, starts, ends, map_left, map_right = read_file(
+            file.read().splitlines()
+        )
         end_locs = [False] * (loc_to_id("ZZZ") + 1)
         for end in ends:
             end_locs[loc_to_id(end)] = True
@@ -58,7 +60,10 @@ def main():
                     found.append(steps)
                 if steps == 100000:
                     break
-            deltas = [found[0], *[found[i+1] - found[i] for i in range(len(found) - 1)]]
+            deltas = [
+                found[0],
+                *[found[i + 1] - found[i] for i in range(len(found) - 1)],
+            ]
             factors.append(deltas[0])
             print(f"For start {start} found at {deltas}")
 

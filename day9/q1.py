@@ -8,7 +8,7 @@ def find_continuation(sequence: List[int]) -> int:
     if all([val == 0 for val in sequence]):
         return 0
 
-    deltas = [sequence[i+1] - sequence[i] for i in range(len(sequence)-1)]
+    deltas = [sequence[i + 1] - sequence[i] for i in range(len(sequence) - 1)]
     return find_continuation(deltas) + sequence[-1]
 
 
