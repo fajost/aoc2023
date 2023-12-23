@@ -7,7 +7,7 @@ SOURCE = Path("test.txt")
 
 @dataclass
 class Arrangement:
-    springs: List[str]
+    springs: str
     groups: List[int]
 
 
@@ -15,33 +15,49 @@ def read_arrangements(lines):
     arrangements = []
     for line in lines:
         springs, groups = line.split(" ")
-        springs = ([*[val for val in springs], "?"] * 5)[:-1]
+        springs = ((springs + "?") * 5)[:-1]
         groups = [int(val) for val in groups.split(",")] * 5
         arrangements.append(Arrangement(springs, groups))
     return arrangements
 
 
-def count_options(springs, groups, remaining, must_connect=False, must_end=False):
-    if len(springs) < sum(groups) + len(groups) - 1:
+def count_options(springs, groups, remaining, prior=None, must_connect=False, must_end=False):
+    total_group = sum(groups)
+    if prior is None:
+        prior = {}
+    elif (springs, total_group, must_connect, must_end) in prior:
+        return prior[(springs, total_group, must_connect, must_end)]
+
+    if len(springs) < total_group + len(groups) - 1:
+        prior[(springs, total_group, must_connect, must_end)] = 0
         return 0
-    if sum(groups) > remaining:
+    if total_group > remaining:
+        prior[(springs, total_group, must_connect, must_end)] = 0
         return 0
     if len(springs) == 0:
         if len(groups) == 0:
+            prior[(springs, total_group, must_connect, must_end)] = 1
             return 1
         else:
+            prior[(springs, total_group, must_connect, must_end)] = 0
             return 0
 
     if springs[0] == ".":
         if must_connect:
+            prior[(springs, total_group, must_connect, must_end)] = 0
             return 0
         else:
-            return count_options(springs[1:], groups.copy(), remaining)
+            prior[(springs, total_group, must_connect, must_end)] = count_options(
+                springs[1:], groups.copy(), remaining, prior
+            )
+            return prior[(springs, total_group, must_connect, must_end)]
 
     if springs[0] == "#":
         if must_end:
+            prior[(springs, total_group, must_connect, must_end)] = 0
             return 0
         if len(groups) == 0:
+            prior[(springs, total_group, must_connect, must_end)] = 0
             return 0
         groups[0] -= 1
         if groups[0] == 0:
@@ -50,20 +66,22 @@ def count_options(springs, groups, remaining, must_connect=False, must_end=False
             must_end = True
         else:
             must_connect = True
-        return count_options(
-            springs[1:], groups.copy(), remaining - 1, must_connect, must_end
+        prior[(springs, total_group, must_connect, must_end)] = count_options(
+            springs[1:], groups.copy(), remaining - 1, prior, must_connect, must_end
         )
+        return prior[(springs, total_group, must_connect, must_end)]
 
     # unclear case "?"
     count = 0
     if not must_end:
         count += count_options(
-            ["#", *springs[1:]], groups.copy(), remaining, must_connect, must_end
+            "#" + springs[1:], groups.copy(), remaining, prior, must_connect, must_end
         )
     if not must_connect:
         count += count_options(
-            [".", *springs[1:]], groups.copy(), remaining - 1, must_connect, must_end
+            "." + springs[1:], groups.copy(), remaining - 1, prior, must_connect, must_end
         )
+    prior[(springs, total_group, must_connect, must_end)] = count
     return count
 
 
