@@ -52,7 +52,10 @@ def check_connections(grid, visited, row, col, step):
         padding_row = row + connect.offset_row // 2
         padding_col = col + connect.offset_col // 2
         if (
-            (visited[target_row][target_col] == 0 or visited[target_row][target_col] == step + 1)
+            (
+                visited[target_row][target_col] == 0
+                or visited[target_row][target_col] == step + 1
+            )
             and grid[target_row][target_col] in connect.to_pipe
             and grid[row][col] in connect.from_pipe
         ):
