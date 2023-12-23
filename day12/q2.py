@@ -37,9 +37,7 @@ def count_options(springs, groups, prior=None, must_connect=False, must_end=Fals
         if must_connect:
             result = 0
         else:
-            result = count_options(
-                springs[1:], groups.copy(), prior
-            )
+            result = count_options(springs[1:], groups.copy(), prior)
     elif springs[0] == "#":
         if must_end or not groups:
             result = 0
