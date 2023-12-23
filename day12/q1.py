@@ -82,6 +82,7 @@ def main():
         options = count_options(arrangement.springs, arrangement.groups)
         counts.append(options)
         # print(f"Found {options} options")
+    print(counts)
     print(sum(counts))
 
 
