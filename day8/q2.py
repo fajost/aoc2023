@@ -1,22 +1,25 @@
 from pathlib import Path
+from typing import Optional, List, Tuple
 import math
 
 SOURCE = Path("input.txt")
 
 
-def loc_to_id(loc):
+def loc_to_id(loc: str) -> int:
     value = 0
     for c in loc:
         value = value * 41 + (ord(c) - 49)
     return value
 
 
-def read_file(lines):
+def read_file(
+    lines: List[str],
+) -> Tuple[str, List[str], List[str], List[Optional[int]], List[Optional[int]]]:
     instructions = lines[0]
     starts = []
     ends = []
-    map_left = [None] * (loc_to_id("ZZZ") + 1)
-    map_right = [None] * (loc_to_id("ZZZ") + 1)
+    map_left: List[Optional[int]] = [None] * (loc_to_id("ZZZ") + 1)
+    map_right: List[Optional[int]] = [None] * (loc_to_id("ZZZ") + 1)
     for line in lines[2:]:
         splitted = line.split(" = ")
         source = splitted[0]

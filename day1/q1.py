@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import List
 
 SOURCE = Path("input.txt")
 
@@ -6,7 +7,7 @@ digits = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
 digit_reversed = [d[::-1] for d in digits]
 
 
-def find_first_digit(line, words):
+def find_first_digit(line: str, words: List[str]) -> int:
     found_pos = len(line) + 1
     found_idx = -1
     for idx, word in enumerate(words):
@@ -20,6 +21,8 @@ def find_first_digit(line, words):
             return found_idx + 1
         if c.isnumeric():
             return int(c)
+
+    return 0
 
 
 if __name__ == "__main__":

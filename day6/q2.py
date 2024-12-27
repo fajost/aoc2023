@@ -10,8 +10,8 @@ SOURCE = Path("input.txt")
 def read_file(file_name):
     with file_name.open("r") as file:
         lines = file.read().splitlines()
-        times = [int(re.sub("\s", "", lines[0]).split(":")[1])]
-        distances = [int(re.sub("\s", "", lines[1]).split(":")[1])]
+        times = [int(re.sub(r"\s", "", lines[0]).split(":")[1])]
+        distances = [int(re.sub(r"\s", "", lines[1]).split(":")[1])]
         return times, distances
 
 
